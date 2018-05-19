@@ -1,18 +1,17 @@
 package com.hayashi.android_trajectory
 
-import android.support.v4.app.FragmentActivity
 import android.os.Bundle
-
-import com.google.android.gms.maps.CameraUpdateFactory
+import android.support.v4.app.FragmentActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.hayashi.android_trajectory.utility.MyLog
+import com.hayashi.android_trajectory.utility.MyMap
 
 class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
-    private var mMap: GoogleMap? = null
+    private val l = MyLog("Loc")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,26 +20,15 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        l.d("MapsActivity")
+        LocationStarter.start(this)
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
-        this.mMap = googleMap
-
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        this.mMap?.let {
-            it.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-            it.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-        }
+        MyMap.map = googleMap
+        MyMap.updateCamera(
+                LatLng(35.710063, 139.8107), // スカイツリーで初期化
+                MyMap.zoomLevelUp
+        )
     }
 }
