@@ -6,6 +6,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.hayashi.android_trajectory.utility.Csv
 import com.hayashi.android_trajectory.utility.MyLog
 import com.hayashi.android_trajectory.utility.MyMap
 import com.hayashi.android_trajectory.utility.Text
@@ -30,11 +31,22 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 LatLng(35.710063, 139.8107), // スカイツリーで初期化
                 MyMap.zoomLevelUp
         )
+        drawTrajectory()
     }
 
     private fun start() {
         l.d("MapsActivity")
         LocationListenerImpl.text = Text("location_log.csv", this)
         LocationStarter.start(this)
+    }
+
+    private fun drawTrajectory() {
+        l.d("drawTrajectory() called")
+        LocationListenerImpl.text?.let {
+            l.d("drawTrajectory() read CSV")
+            val dots: ArrayList<LatLng> = Csv(it).readAsLatLng()
+            l.d("drawTrajectory() draw")
+            MyMap.drawTrajectory(dots)
+        }
     }
 }
