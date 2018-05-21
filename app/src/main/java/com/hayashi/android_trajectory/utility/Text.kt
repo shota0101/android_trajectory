@@ -27,10 +27,7 @@ class Text(filePath: String, context: Context) {
         try {
             input = this.context.openFileInput(this.filePath)
             val reader = BufferedReader(InputStreamReader(input, "UTF-8"))
-            var lineBuffer: String = reader.readLine()
-            while (lineBuffer != null) {
-                text += lineBuffer
-            }
+            text = reader.readText()
         } catch (e: IOException) {
             e.printStackTrace()
         }
