@@ -1,11 +1,10 @@
 package com.hayashi.android_trajectory.utility
 
+import android.graphics.Color
 import android.location.Location
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.hayashi.android_trajectory.extensions.toLatLng
 
 object MyMap {
@@ -44,6 +43,20 @@ object MyMap {
                     latLng,
                     zoomLevel)
             it.moveCamera(cameraUpdate)
+        }
+    }
+
+    fun drawTrajectory(dots: ArrayList<LatLng>) {
+        val polylineOptions = PolylineOptions()
+        polylineOptions.addAll(dots)
+        polylineOptions.color(Color.RED)
+        this.map?.let {
+            val polyline = it.addPolyline(polylineOptions)
+            // 直前の色を変更
+            polyline.setColor(Color.parseColor("#6495ed"))
+            // 直前に丸みを付ける
+            polyline.setStartCap(RoundCap())
+            polyline.setEndCap(RoundCap())
         }
     }
 }
